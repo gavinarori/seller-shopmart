@@ -20,11 +20,11 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="relative hidden bg-muted rounded-xl lg:block">
+      <div className="relative hidden m-3 bg-muted rounded-xl lg:block">
         <img
-          src="https://img.freepik.com/free-photo/clothing-store-employee-giving-online-order-african-american-customer-standing-counter-desk-modern-boutique-shopaholic-man-buying-fashionable-merchandise-shopping-mall_482257-72233.jpg?t=st=1735666682~exp=1735670282~hmac=3ca2ed8554c7839289020dd6d8b49109078bf7ab1eceebfd251de1028987260c&w=1380"
+          src="https://img.freepik.com/free-photo/cyber-monday-shopping-sales_23-2148688499.jpg?t=st=1735669348~exp=1735672948~hmac=c8edb7949a17b6de82dc499ca963f99f499030760b2a48f955acd391a31658ef&w=1380"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 rounded-xl h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
     </div>
