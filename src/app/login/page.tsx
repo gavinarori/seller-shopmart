@@ -5,7 +5,7 @@ import { LoginForm } from "@/components/login-form"
 export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
+      <div className="flex flex-col  p-6 md:p-10">
       <Link href="/" className=" inline-flex items-center">
           <img
             src="/1.png"
@@ -21,7 +21,7 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden m-3 bg-muted rounded-xl lg:block">
         <img
-          src="/rb_170.png"
+          src="/rb_1084.png"
           alt="Image"
           className="absolute inset-0 rounded-xl h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
