@@ -21,7 +21,7 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden m-3 bg-muted rounded-xl lg:block">
         <img
-          src="/rb_1445.png"
+          src="/rb_170.png"
           alt="Image"
           className="absolute inset-0 rounded-xl h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
