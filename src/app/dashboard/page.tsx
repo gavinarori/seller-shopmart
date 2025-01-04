@@ -202,8 +202,8 @@ export default function Page() {
             </p>
             
             <div className="flex gap-4 mb-12">
-              <Button variant="outline">View docs</Button>
-              <Button variant="secondary">Book a Demo</Button>
+              <Button className="rounded-xl" variant="outline">View docs</Button>
+              <Button className="rounded-xl">Book a Demo</Button>
             </div>
           </div>
           <div className="w-full md:w-1/2 flex justify-center z-10">
