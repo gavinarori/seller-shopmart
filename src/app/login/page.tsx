@@ -22,7 +22,7 @@ export default function LoginPage() {
       </div>
       <div className="relative hidden m-3 bg-muted rounded-xl lg:block">
         <img
-          src="https://img.freepik.com/free-photo/cyber-monday-shopping-sales_23-2148688499.jpg?t=st=1735669348~exp=1735672948~hmac=c8edb7949a17b6de82dc499ca963f99f499030760b2a48f955acd391a31658ef&w=1380"
+          src="/rb_4703.png"
           alt="Image"
           className="absolute inset-0 rounded-xl h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
