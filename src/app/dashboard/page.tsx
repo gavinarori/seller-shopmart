@@ -1,4 +1,5 @@
 "use client"
+import { useState } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -11,12 +12,27 @@ import * as React from "react"
 import { cn } from "@/lib/utils";
 import { DotPattern } from "@/components/dot-pattern";
 import { Chart } from "@/components/charts"
+import ProductForm from "@/components/product-form"
+import { Banner } from "@/components/banner"
+
 
 export default function Page() {
+  const [activeView, setActiveView] = useState<string>("home")
+
+  const renderActiveView = () => {
+    switch (activeView) {
+      case "home":
+        return <Chart />
+      case "add-product":
+        return <ProductForm onCancel={() => setActiveView("home")} />
+      default:
+        return <Chart />
+    }
+  }
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar onNavigate={setActiveView} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">
@@ -25,33 +41,8 @@ export default function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="flex ">
-      <div className="max-w-8xl ">
-        <div className="relative flex flex-col  md:flex-row gap-8 items-center overflow-hidden rounded-xl border bg-muted/50 p-8 ">
-          <div className="flex-1 z-10">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Connect Button</h1>
-            <p className="text-lg mb-8">
-              A fully featured wallet connection component that allows to Connect to 500+ external 
-              wallets, connect via email, phone number, passkey or social logins, Convert any wallet to a 
-              ERC4337 smart wallet for gasless transactions and provides SIWE (Sign In With Ethereum)
-            </p>
-            
-            <div className="flex gap-4 mb-12">
-              <Button className="rounded-xl" variant="outline">View docs</Button>
-              <Button className="rounded-xl">Book a Demo</Button>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 flex justify-center z-10">
-            <img src="/download.png" alt="Connect Button Illustration" className="w-auto h-60" />
-          </div>
-          <DotPattern className={cn(
-            "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
-          )} />
-        </div>
-      </div>
-    </div>
-    {/**here */}
-            <Chart/>
+          <Banner />
+            {renderActiveView()}
         </div>
       </SidebarInset>
     </SidebarProvider>
