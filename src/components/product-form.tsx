@@ -1,262 +1,202 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Package, DollarSign, ShoppingCart, ImageIcon, X } from 'lucide-react'
 
-export default function CreateProductForm() {
-  const [formData, setFormData] = useState({
+export default function ProductForm() {
+  const router = useRouter()
+  const [activeTab, setActiveTab] = useState("basic")
+  const [state, setState] = useState({
     name: '',
-    category: '',
-    subCategory: '',
-    brand: '',
+    description: '',
     price: '',
     stock: '',
-    lowStockThreshold: '10',
-    discount: '0',
-    description: '',
-    shopName: '',
+    category: '',
+    discount: '',
+    brand: '',
     city: '',
     state: '',
     country: '',
-    status: 'active',
   })
+  const [images, setImages] = useState<File[]>([])
+  const [imagePreviews, setImagePreviews] = useState<string[]>([])
+  const [shopName, setShopName] = useState('')
 
-  const [suppliers, setSuppliers] = useState([{ name: '', contact: '', address: '' }])
-  const [specifications, setSpecifications] = useState([{ key: '', value: '' }])
-  const [images, setImages] = useState([{ url: '', alt: '' }])
-  const [tags, setTags] = useState([''])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setState({ ...state, [e.target.name]: e.target.value })
   }
 
-  const handleSupplierChange = (index: number, field: string, value: string) => {
-    const newSuppliers:any = [...suppliers]
-    newSuppliers[index][field] = value
-    setSuppliers(newSuppliers)
-  }
-
-  const handleSpecificationChange = (index: number, field: string, value: string) => {
-    const newSpecifications:any = [...specifications]
-    newSpecifications[index][field] = value
-    setSpecifications(newSpecifications)
-  }
-
-  const handleImageChange = (index: number, field: string, value: string) => {
-    const newImages:any = [...images]
-    newImages[index][field] = value
-    setImages(newImages)
-  }
-
-  const handleTagChange = (index: number, value: string) => {
-    const newTags = [...tags]
-    newTags[index] = value
-    setTags(newTags)
-  }
-
-  const addField = (field: 'supplier' | 'specification' | 'image' | 'tag') => {
-    switch (field) {
-      case 'supplier':
-        setSuppliers([...suppliers, { name: '', contact: '', address: '' }])
-        break
-      case 'specification':
-        setSpecifications([...specifications, { key: '', value: '' }])
-        break
-      case 'image':
-        setImages([...images, { url: '', alt: '' }])
-        break
-      case 'tag':
-        setTags([...tags, ''])
-        break
+  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const fileArray = Array.from(e.target.files)
+      setImages(fileArray)
+      
+      const previewArray = fileArray.map(file => URL.createObjectURL(file))
+      setImagePreviews(previewArray)
     }
-  }
+  }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const removeImage = useCallback((index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index))
+    setImagePreviews(prev => prev.filter((_, i) => i !== index))
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
-    const productData = {
-      ...formData,
-      suppliers,
-      specifications: Object.fromEntries(specifications.map(spec => [spec.key, spec.value])),
-      images,
-      tags: tags.filter(tag => tag !== ''),
-      price: parseFloat(formData.price),
-      stock: parseInt(formData.stock),
-      lowStockThreshold: parseInt(formData.lowStockThreshold),
-      discount: parseFloat(formData.discount),
-    }
-    console.log('Submitting product data:', productData)
-    // Add your API call here
+    const formData = new FormData()
+
+    Object.entries(state).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+
+    formData.append('shopName', shopName)
+
+    images.forEach((image) => {
+      formData.append('images', image)
+    })
+
   }
+
+  const progress = (Object.values(state).filter(Boolean).length / Object.keys(state).length) * 100
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto">
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Basic Information</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="name">Product Name</Label>
-            <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="brand">Brand</Label>
-            <Input id="brand" name="brand" value={formData.brand} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="category">Category</Label>
-            <Input id="category" name="category" value={formData.category} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="subCategory">Sub-Category</Label>
-            <Input id="subCategory" name="subCategory" value={formData.subCategory} onChange={handleInputChange} />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Pricing and Stock</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="price">Price</Label>
-            <Input id="price" name="price" type="number" value={formData.price} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="stock">Stock</Label>
-            <Input id="stock" name="stock" type="number" value={formData.stock} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="lowStockThreshold">Low Stock Threshold</Label>
-            <Input id="lowStockThreshold" name="lowStockThreshold" type="number" value={formData.lowStockThreshold} onChange={handleInputChange} />
-          </div>
-          <div>
-            <Label htmlFor="discount">Discount (%)</Label>
-            <Input id="discount" name="discount" type="number" value={formData.discount} onChange={handleInputChange} />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Description</h2>
-        <Textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required />
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Specifications</h2>
-        {specifications.map((spec, index) => (
-          <div key={index} className="grid grid-cols-2 gap-4">
-            <Input 
-              placeholder="Key" 
-              value={spec.key} 
-              onChange={(e) => handleSpecificationChange(index, 'key', e.target.value)} 
-            />
-            <Input 
-              placeholder="Value" 
-              value={spec.value} 
-              onChange={(e) => handleSpecificationChange(index, 'value', e.target.value)} 
-            />
-          </div>
-        ))}
-        <Button type="button" onClick={() => addField('specification')}>Add Specification</Button>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Suppliers</h2>
-        {suppliers.map((supplier, index) => (
-          <div key={index} className="grid grid-cols-3 gap-4">
-            <Input 
-              placeholder="Name" 
-              value={supplier.name} 
-              onChange={(e) => handleSupplierChange(index, 'name', e.target.value)} 
-            />
-            <Input 
-              placeholder="Contact" 
-              value={supplier.contact} 
-              onChange={(e) => handleSupplierChange(index, 'contact', e.target.value)} 
-            />
-            <Input 
-              placeholder="Address" 
-              value={supplier.address} 
-              onChange={(e) => handleSupplierChange(index, 'address', e.target.value)} 
-            />
-          </div>
-        ))}
-        <Button type="button" onClick={() => addField('supplier')}>Add Supplier</Button>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Images</h2>
-        {images.map((image, index) => (
-          <div key={index} className="grid grid-cols-2 gap-4">
-            <Input 
-              placeholder="URL" 
-              value={image.url} 
-              onChange={(e) => handleImageChange(index, 'url', e.target.value)} 
-            />
-            <Input 
-              placeholder="Alt Text" 
-              value={image.alt} 
-              onChange={(e) => handleImageChange(index, 'alt', e.target.value)} 
-            />
-          </div>
-        ))}
-        <Button type="button" onClick={() => addField('image')}>Add Image</Button>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Shop Information</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="shopName">Shop Name</Label>
-            <Input id="shopName" name="shopName" value={formData.shopName} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="city">City</Label>
-            <Input id="city" name="city" value={formData.city} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="state">State</Label>
-            <Input id="state" name="state" value={formData.state} onChange={handleInputChange} required />
-          </div>
-          <div>
-            <Label htmlFor="country">Country</Label>
-            <Input id="country" name="country" value={formData.country} onChange={handleInputChange} required />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Tags</h2>
-        {tags.map((tag, index) => (
-          <Input 
-            key={index}
-            placeholder="Tag" 
-            value={tag} 
-            onChange={(e) => handleTagChange(index, e.target.value)} 
-          />
-        ))}
-        <Button type="button" onClick={() => addField('tag')}>Add Tag</Button>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Status</h2>
-        <Select name="status" onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <Button type="submit" className="w-full">Create Product</Button>
+    <form onSubmit={handleSubmit}>
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle>Add New Product</CardTitle>
+          <Progress value={progress} className="w-full mt-2" />
+        </CardHeader>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="basic"><Package className="w-4 h-4 mr-2" />Basic</TabsTrigger>
+              <TabsTrigger value="pricing"><DollarSign className="w-4 h-4 mr-2" />Pricing</TabsTrigger>
+              <TabsTrigger value="inventory"><ShoppingCart className="w-4 h-4 mr-2" />Inventory</TabsTrigger>
+              <TabsTrigger value="media"><ImageIcon className="w-4 h-4 mr-2" />Media</TabsTrigger>
+            </TabsList>
+            <TabsContent value="basic" className="space-y-4">
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" name="name" value={state.name} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <Textarea id="description" name="description" value={state.description} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label htmlFor="brand">Brand</Label>
+                <Input id="brand" name="brand" value={state.brand} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label htmlFor="category">Category</Label>
+                <Input id="category" name="category" value={state.category} onChange={handleChange} required />
+              </div>
+            </TabsContent>
+            <TabsContent value="pricing" className="space-y-4">
+              <div>
+                <Label htmlFor="price">Price</Label>
+                <Input id="price" name="price" type="number" value={state.price} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label htmlFor="discount">Discount</Label>
+                <Input id="discount" name="discount" type="number" value={state.discount} onChange={handleChange} />
+              </div>
+            </TabsContent>
+            <TabsContent value="inventory" className="space-y-4">
+              <div>
+                <Label htmlFor="stock">Stock</Label>
+                <Input id="stock" name="stock" type="number" value={state.stock} onChange={handleChange} required />
+              </div>
+              <div>
+                <Label htmlFor="shopName">Shop Name</Label>
+                <Input id="shopName" name="shopName" value={shopName} onChange={(e) => setShopName(e.target.value)} required />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="city">City</Label>
+                  <Input id="city" name="city" value={state.city} onChange={handleChange} required />
+                </div>
+                <div>
+                  <Label htmlFor="state">State</Label>
+                  <Input id="state" name="state" value={state.state} onChange={handleChange} required />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="country">Country</Label>
+                <Input id="country" name="country" value={state.country} onChange={handleChange} required />
+              </div>
+            </TabsContent>
+            <TabsContent value="media" className="space-y-4">
+              <div>
+                <Label htmlFor="images">Product Images</Label>
+                <Input id="images" name="images" type="file" multiple onChange={handleImageChange} required />
+              </div>
+              {imagePreviews.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="relative">
+                      <Image 
+                        src={preview} 
+                        alt={`Preview ${index + 1}`} 
+                        width={200} 
+                        height={200} 
+                        className="rounded-lg object-cover w-full h-40"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-2 right-2"
+                        onClick={() => removeImage(index)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => {
+              const tabs = ["basic", "pricing", "inventory", "media"]
+              const currentIndex = tabs.indexOf(activeTab)
+              if (currentIndex > 0) {
+                setActiveTab(tabs[currentIndex - 1])
+              }
+            }}
+          >
+            Previous
+          </Button>
+          <Button 
+            type="button"
+            onClick={() => {
+              const tabs = ["basic", "pricing", "inventory", "media"]
+              const currentIndex = tabs.indexOf(activeTab)
+              if (currentIndex < tabs.length - 1) {
+                setActiveTab(tabs[currentIndex + 1])
+              } else {
+                handleSubmit(new Event('submit') as any)
+              }
+            }}
+          >
+            {activeTab === "media" ? "Submit" : "Next"}
+          </Button>
+        </CardFooter>
+      </Card>
     </form>
   )
 }
