@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Package, DollarSign, ShoppingCart, ImageIcon, X } from 'lucide-react'
 
-export default function ProductForm() {
+export default function ProductForm({ onCancel }: { onCancel: () => void }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("basic")
   const [state, setState] = useState({
