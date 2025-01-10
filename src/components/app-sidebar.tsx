@@ -18,7 +18,6 @@ import {
   Package,
 } from "lucide-react";
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -113,23 +112,7 @@ const data = {
       icon: Send,
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+
 }
 
 export function AppSidebar({ onNavigate, ...props }: { onNavigate: (view: string) => void } & React.ComponentProps<typeof Sidebar>) {
@@ -166,7 +149,6 @@ export function AppSidebar({ onNavigate, ...props }: { onNavigate: (view: string
             </SidebarMenuButton>
           </SidebarMenuItem>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
