@@ -150,7 +150,7 @@ export function Banner() {
             key={index}
             className={cn(
               "w-2 h-2 rounded-full transition-colors",
-              index === selectedIndex ? "bg-foreground" : "bg-foreground/20"
+              index === selectedIndex ? "bg-rose-500" : "bg-foreground/20"
             )}
             onClick={() => emblaApi?.scrollTo(index)}
             aria-label={`Go to slide ${index + 1}`}
