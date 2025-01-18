@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Plus, Store, History, Settings, ShoppingBag } from 'lucide-react'
+import { Plus, Store, History, Settings, ShoppingBag, X } from 'lucide-react'
 
 import {
   Dialog,
@@ -33,9 +33,9 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { shopData } from "@/lib/dummyData"
-import { useState } from "react"
+import { shopData } from "../lib/dummyData"
 
 const sidebarItems = [
   { name: "Create Shop", icon: Plus },
@@ -46,8 +46,9 @@ const sidebarItems = [
 
 export function ShopManagementDialog() {
   const [shops, setShops] = React.useState(shopData)
-  const [selectedShop, setSelectedShop] = useState<any>(null)
-  const [activeSection, setActiveSection] = useState("Your Shops")
+  const [selectedShop, setSelectedShop] = React.useState<any>(null)
+  const [activeSection, setActiveSection] = React.useState("Your Shops")
+  const [isOpen, setIsOpen] = React.useState(false)
 
   const handleCreate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -66,7 +67,7 @@ export function ShopManagementDialog() {
     setActiveSection("Your Shops")
   }
 
-  const handleEdit = (shop: React.SetStateAction<null>) => {
+  const handleEdit = (shop:any) => {
     setSelectedShop(shop)
     setActiveSection("Manage Shop")
   }
@@ -94,52 +95,24 @@ export function ShopManagementDialog() {
     switch (activeSection) {
       case "Create Shop":
         return (
-          <form onSubmit={handleCreate}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="address" className="text-right">
-                  Address
-                </Label>
-                <Input
-                  id="address"
-                  name="address"
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="contact" className="text-right">
-                  Contact
-                </Label>
-                <Input
-                  id="contact"
-                  name="contact"
-                  className="col-span-3"
-                />
-              </div>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" required />
             </div>
-            <div className="flex justify-end">
-              <Button type="submit">Create Shop</Button>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" name="description" />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input id="address" name="address" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact">Contact</Label>
+              <Input id="contact" name="contact" required />
+            </div>
+            <Button type="submit" className="w-full">Create Shop</Button>
           </form>
         )
       case "Your Shops":
@@ -148,24 +121,28 @@ export function ShopManagementDialog() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Contact</TableHead>
+                <TableHead className="hidden md:table-cell">Address</TableHead>
+                <TableHead className="hidden md:table-cell">Contact</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {shops.map((shop:any) => (
+              {shops.map((shop) => (
                 <TableRow key={shop.id}>
                   <TableCell>{shop.name}</TableCell>
-                  <TableCell>{shop.address}</TableCell>
-                  <TableCell>{shop.contact}</TableCell>
+                  <TableCell className="hidden md:table-cell">{shop.address}</TableCell>
+                  <TableCell className="hidden md:table-cell">{shop.contact}</TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(shop)}>
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(shop.id)}>
-                      <ShoppingBag className="h-4 w-4" />
-                    </Button>
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="icon" onClick={() => handleEdit(shop)}>
+                        <Settings className="h-4 w-4" />
+                        <span className="sr-only">Edit</span>
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(shop.id)}>
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Delete</span>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -174,66 +151,34 @@ export function ShopManagementDialog() {
         )
       case "Shop History":
         return (
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Shop History</h3>
-            <p>This feature is not yet implemented. It would show the history of changes for each shop.</p>
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Shop History</h3>
+            <p className="text-muted-foreground">This feature is not yet implemented. It would show the history of changes for each shop.</p>
           </div>
         )
       case "Manage Shop":
         return selectedShop ? (
-          <form onSubmit={handleUpdate}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  name="name"
-                  defaultValue={selectedShop.name}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  defaultValue={selectedShop.description}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="address" className="text-right">
-                  Address
-                </Label>
-                <Input
-                  id="address"
-                  name="address"
-                  defaultValue={selectedShop.address}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="contact" className="text-right">
-                  Contact
-                </Label>
-                <Input
-                  id="contact"
-                  name="contact"
-                  defaultValue={selectedShop.contact}
-                  className="col-span-3"
-                />
-              </div>
+          <form onSubmit={handleUpdate} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" defaultValue={selectedShop.name} required />
             </div>
-            <div className="flex justify-end">
-              <Button type="submit">Update Shop</Button>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" name="description" defaultValue={selectedShop.description} />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input id="address" name="address" defaultValue={selectedShop.address} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="contact">Contact</Label>
+              <Input id="contact" name="contact" defaultValue={selectedShop.contact} required />
+            </div>
+            <Button type="submit" className="w-full">Update Shop</Button>
           </form>
         ) : (
-          <p>Please select a shop to manage.</p>
+          <p className="text-muted-foreground">Please select a shop to manage.</p>
         )
       default:
         return null
@@ -241,14 +186,14 @@ export function ShopManagementDialog() {
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>Manage Shops</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[900px] p-0">
+      <DialogContent className="sm:max-w-[90vw] h-[90vh] p-0">
         <SidebarProvider>
-          <div className="flex h-auto">
-            <Sidebar collapsible="none" className="w-[200px] border-r">
+          <div className="flex h-[90%]">
+            <Sidebar collapsible="none" className="w-[200px] border-r hidden md:block">
               <SidebarContent>
                 <SidebarGroup>
                   <SidebarGroupContent>
@@ -269,16 +214,31 @@ export function ShopManagementDialog() {
                 </SidebarGroup>
               </SidebarContent>
             </Sidebar>
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-hidden flex flex-col">
               <DialogHeader className="p-6">
-                <DialogTitle>Shop Management</DialogTitle>
+                <div className="flex items-center justify-between">
+                  <DialogTitle>{activeSection}</DialogTitle>
+                  <div className="md:hidden">
+                    <select
+                      value={activeSection}
+                      onChange={(e) => setActiveSection(e.target.value)}
+                      className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    >
+                      {sidebarItems.map((item) => (
+                        <option key={item.name} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
                 <DialogDescription>
-                  Create, edit, delete shops and view their history.
+                  Manage your shops efficiently
                 </DialogDescription>
               </DialogHeader>
-              <div className="p-6 pt-0">
+              <ScrollArea className="flex-1 p-6 pt-0">
                 {renderContent()}
-              </div>
+              </ScrollArea>
             </div>
           </div>
         </SidebarProvider>
