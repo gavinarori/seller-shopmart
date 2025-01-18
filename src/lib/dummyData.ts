@@ -17,6 +17,15 @@ export const shopData = [
       logo: '/placeholder.svg?height=100&width=100',
       rating: 4.2,
     },
+    {
+      id: '3',
+      name: 'Green Thumb Garden Center',
+      description: 'Everything you need for a beautiful garden and thriving plants.',
+      address: '789 Bloom St, Greenville, ST 13579',
+      contact: '+1 (555) 246-8135',
+      logo: '/placeholder.svg?height=100&width=100',
+      rating: 4.7,
+    },
   ];
   
   
