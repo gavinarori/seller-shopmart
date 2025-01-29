@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { cn } from "@/functions";
+import { cn } from "@/lib/utils";
 
 interface BlurIntProps {
     word: React.ReactNode | string;

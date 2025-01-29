@@ -2,14 +2,14 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PLANS } from "@/constants";
-import { cn } from "@/functions";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
-import Container from "../global/container";
-import { Button } from "../ui/button";
-import NumberTicker from "../ui/number-ticker";
-import { SectionBadge } from "../ui/section-bade";
+import Container from "@/components/global/container";
+import { Button } from "@/components/ui/button";
+import NumberTicker from "@/components/ui/number-ticker";
+import { SectionBadge } from "@/components/ui/section-bade";
 
 type Plan = "monthly" | "yearly";
 
@@ -170,7 +170,6 @@ const Plan = ({
                 <div className="p-3 mt- h-auto flex w-full items-center">
                     <Button
                         asChild
-                        variant={id === "pro" ? "default" : "tertiary"}
                         className="w-full hover:scale-100 hover:translate-y-0 shadow-none"
                     >
 

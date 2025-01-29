@@ -1,11 +1,11 @@
 "use client";
 
-import Container from "../global/container";
-import Icons from "../global/icons";
-import Images from "../global/images";
-import MagicCard from "../ui/magic-card";
-import { Ripple } from "../ui/ripple";
-import { SectionBadge } from "../ui/section-bade";
+import Container from "@/components/global/container";
+import Icons from "@/components/global/icons";
+import Images from "@/components/global/images";
+import  MagicCard  from "@/components/ui/magic-card";
+import { Ripple } from "@/components/ui/ripple";
+import { SectionBadge } from "@/components/ui/section-bade";
 
 const Features = () => {
     return (

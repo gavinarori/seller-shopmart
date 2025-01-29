@@ -1,5 +1,5 @@
-import Images from "../global/images";
-import Marquee from "../ui/marquee";
+import Images from "@/components/global/images";
+import { Marquee } from "@/components/ui/marquee";
 
 const Companies = () => {
     return (
