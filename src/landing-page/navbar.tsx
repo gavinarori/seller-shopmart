@@ -1,13 +1,13 @@
 "use client";
 
-import { cn } from "@/functions";
+import { cn } from "@/lib/utils";
 import { useClerk } from "@clerk/nextjs";
 import { ArrowRightIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from 'react';
-import Icons from "../global/icons";
-import Wrapper from "../global/wrapper";
-import { Button } from "../ui/button";
+import Icons from "@/components/global/icons";
+import Wrapper from "@/components/global/wrapper";
+import { Button } from "@/components/ui/button";
 import Menu from "./menu";
 import MobileMenu from "./mobile-menu";
 
@@ -52,19 +52,19 @@ const Navbar = () => {
                         </div>
                         <div className="items-center flex gap-2 lg:gap-4">
                             {user ? (
-                                <Button size="sm" variant="white" asChild className="hidden sm:flex">
+                                <Button size="sm"  asChild className="hidden sm:flex">
                                     <Link href="/app">
                                         Dashboard
                                     </Link>
                                 </Button>
                             ) : (
                                 <>
-                                    <Button size="sm" variant="tertiary" asChild className="hover:translate-y-0 hover:scale-100">
+                                    <Button size="sm" asChild className="hover:translate-y-0 hover:scale-100">
                                         <Link href="/auth/signin">
                                             Login
                                         </Link>
                                     </Button>
-                                    <Button size="sm" variant="white" asChild className="hidden sm:flex">
+                                    <Button size="sm"  asChild className="hidden sm:flex">
                                         <Link href="/auth/signup">
                                             Start for free
                                             <ArrowRightIcon className="w-4 h-4 ml-2 hidden lg:block" />

@@ -1,8 +1,8 @@
 import { PERKS } from "@/constants";
-import { cn } from "@/functions";
+import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import Container from "../global/container";
-import { SectionBadge } from "../ui/section-bade";
+import Container from "@/components/global/container";
+import { SectionBadge } from "@/components/ui/section-bade";
 
 const Perks = () => {
     return (

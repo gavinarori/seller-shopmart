@@ -1,10 +1,10 @@
 import { FOOTER_LINKS } from "@/constants";
 import Link from "next/link";
-import Container from "../global/container";
-import Icons from "../global/icons";
-import Wrapper from "../global/wrapper";
-import { Button } from "../ui/button";
-import { Particles } from "../ui/particles";
+import Container from "@/components/global/container";
+import Icons from "@/components/global/icons";
+import Wrapper from "@/components/global/wrapper";
+import { Button } from "@/components/ui/button";
+import { Particles } from "@/components/ui/particles";
 
 const Footer = () => {
     return (

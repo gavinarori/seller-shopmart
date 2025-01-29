@@ -1,7 +1,7 @@
-import Container from "../global/container";
-import Images from "../global/images";
-import { Particles } from "../ui/particles";
-import { SectionBadge } from "../ui/section-bade";
+import Container from "@/components/global/container";
+import Images from "@/components/global/images";
+import { Particles } from "@/components/ui/particles";
+import { SectionBadge } from "@/components/ui/section-bade";
 
 const Connect = () => {
     return (

@@ -1,10 +1,10 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
-import { BlurText } from "../ui/blur-text";
-import { Button } from "../ui/button";
+import { BlurText } from "@/components/ui/blur-text";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Container from "../global/container";
+import Container from "@/components/global/container";
 
 const Hero = () => {
     return (

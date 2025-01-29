@@ -1,7 +1,7 @@
 "use client";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { cn } from "@/functions";
+import { cn } from "@/lib/utils";
 import { useClickOutside } from "@/hooks";
 import { motion } from "framer-motion";
 import { Box, CalendarClock, Captions, CircleHelp, CopyCheck, FileText, Gem, Layers3, LineChart, Newspaper, UserCog, Waypoints } from "lucide-react";

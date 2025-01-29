@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Container from "../global/container";
-import { Button } from "../ui/button";
-import { Particles } from "../ui/particles";
-import RetroGrid from "../ui/retro-grid";
+import Container from "@/components/global/container";
+import { Button } from "@/components/ui/button";
+import { Particles } from "@/components/ui/particles";
+import { RetroGrid } from "@/components/ui/retro-grid";
 
 const CTA = () => {
     return (

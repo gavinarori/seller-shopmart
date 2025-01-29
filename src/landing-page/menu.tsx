@@ -4,7 +4,7 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { CalendarRangeIcon, CircleHelp, HashIcon, Newspaper, UsersIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import Icons from "../global/icons";
+import Icons from "@/components/global/icons";
 
 interface Props {
     title: string;
