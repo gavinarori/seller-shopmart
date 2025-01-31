@@ -1,9 +1,6 @@
+import SellerCustomerChat from "@/components/seller-customer-chat"
 
+export default function Home() {
+  return <SellerCustomerChat />
+}
 
-const HomePage = () => {
-    return (
-        <div>home</div>
-    )
-};
-
-export default HomePage
