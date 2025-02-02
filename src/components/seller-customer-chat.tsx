@@ -171,7 +171,7 @@ export default function SellerCustomerChat() {
             </TabsContent>
           </Tabs>
         </Sidebar>
-        <div className="flex-1 lg:pl-20 flex flex-col">
+        <div className="flex-1 lg:pl-20 md:pl-16 flex flex-col">
           <header className="flex justify-between items-center p-4 border-b">
             <div className="flex items-center">
               <Avatar className="h-10 w-10 mr-4">
