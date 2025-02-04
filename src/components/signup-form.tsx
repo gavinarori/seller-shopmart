@@ -28,7 +28,7 @@ export function SignUpForm({
       text: req.text,
     }));
   };
-
+  
   const strength = checkStrength(password);
 
   const strengthScore = useMemo(() => {
