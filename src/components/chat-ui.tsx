@@ -1,6 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "next/navigation"
+import {
+  get_customers,
+  messageClear,
+  get_customer_message,
+  send_message,
+  updateMessage,
+} from "@/store/Reducers/chatReducer"
+import { socket } from "@/lib/utils"
 import {
   Sidebar,
   SidebarContent,
@@ -17,43 +27,78 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { MessageSquare, Plus, Send, Settings, User } from "lucide-react"
 
-export default function ChatUI() {
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "John Doe", content: "Hey there! How's it going?", timestamp: "2:30 PM" },
-    {
-      id: 2,
-      sender: "You",
-      content: "Hi John! I'm doing well, thanks for asking. How about you?",
-      timestamp: "2:31 PM",
-    },
-    {
-      id: 3,
-      sender: "John Doe",
-      content: "I'm great! Just working on some new features for our dashboard.",
-      timestamp: "2:32 PM",
-    },
-    {
-      id: 4,
-      sender: "You",
-      content: "That sounds exciting! Can't wait to see what you come up with.",
-      timestamp: "2:33 PM",
-    },
-  ])
 
-  const [inputMessage, setInputMessage] = useState("")
+interface Message {
+  id: string;
+  senderId: string;
+  receverId: string;
+  text: string;
+  name?: string;
+  timestamp: string;
+}
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim() !== "") {
-      const newMessage = {
-        id: messages.length + 1,
-        sender: "You",
-        content: inputMessage,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      }
-      setMessages([...messages, newMessage])
-      setInputMessage("")
+const ChatUI = () => {
+  const scrollRef = useRef<HTMLDivElement | null>(null)
+  const dispatch = useDispatch<any>()
+  const { customerId } = useParams<{ customerId: string }>();
+  const { userInfo } = useSelector((state: any) => state.auth)
+  const { customers, currentCustomer, messages, successMessage, activeCustomer } = useSelector((state:any) => state.chat)
+  const [receiverMessage, setReceiverMessage] = useState<any>(null)
+  const [text, setText] = useState<string>("")
+
+  useEffect(() => {
+    dispatch(get_customers(userInfo._id))
+  }, [dispatch, userInfo._id])
+
+  useEffect(() => {
+    if (customerId) {
+      dispatch(get_customer_message(customerId))
     }
+  }, [customerId, dispatch])
+
+  const send = (e: React.FormEvent) => {
+    e.preventDefault()
+    dispatch(
+      send_message({
+        senderId: userInfo._id,
+        receverId: customerId,
+        text,
+        name: userInfo?.shopInfo?.shopName,
+      } as any)
+    )
+    setText("")
   }
+
+  useEffect(() => {
+    if (successMessage) {
+      socket.emit("send_seller_message", messages[messages.length - 1])
+      dispatch(messageClear())
+    }
+  }, [successMessage, dispatch, messages])
+
+  useEffect(() => {
+    socket.on("customer_message", (msg) => {
+      setReceiverMessage(msg)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (receiverMessage) {
+      if (
+        customerId === receiverMessage.senderId &&
+        userInfo._id === receiverMessage.receverId
+      ) {
+        dispatch(updateMessage(receiverMessage))
+      } else {
+        console.log(receiverMessage.senderName + " sent a message")
+        dispatch(messageClear())
+      }
+    }
+  }, [receiverMessage, customerId, userInfo._id, dispatch])
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
 
   return (
     <SidebarProvider>
@@ -67,11 +112,11 @@ export default function ChatUI() {
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              {["John Doe", "Jane Smith", "Team Chat", "Project Discussion"].map((chat, index) => (
+            {customers.map((chat: any, index: number) => (
                 <SidebarMenuItem key={index}>
                   <SidebarMenuButton className="w-full justify-start">
                     <MessageSquare className="mr-2 h-4 w-4" />
-                    <span>{chat}</span>
+                    <span>{chat.name}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -101,33 +146,38 @@ export default function ChatUI() {
           </header>
           <ScrollArea className="flex-1 p-4">
             <div className="space-y-4">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.sender === "You" ? "justify-end" : "justify-start"}`}>
+              {messages.map((message: any) => (
+                <div
+                  key={message.id}
+                  className={`flex ${
+                    message.senderId === userInfo._id
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
                   <div
                     className={`max-w-[70%] rounded-lg p-3 ${
-                      message.sender === "You" ? "bg-primary text-primary-foreground" : "bg-muted"
+                      message.senderId === userInfo._id
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
                     }`}
                   >
-                    <p className="text-sm">{message.content}</p>
-                    <span className="text-xs opacity-50 mt-1 block">{message.timestamp}</span>
+                    <p className="text-sm">{message.text}</p>
+                    <span className="text-xs opacity-50 mt-1 block">
+                      {new Date(message.timestamp).toLocaleTimeString()}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
           </ScrollArea>
           <div className="p-4 border-t">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleSendMessage()
-              }}
-              className="flex space-x-2"
-            >
+            <form onSubmit={send} className="flex space-x-2">
               <Input
                 type="text"
                 placeholder="Type a message..."
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
                 className="flex-1"
               />
               <Button type="submit">
@@ -142,3 +192,4 @@ export default function ChatUI() {
   )
 }
 
+export default ChatUI
