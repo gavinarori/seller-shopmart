@@ -213,6 +213,7 @@ export default function SellerCustomerChat() {
                     </CardContent>
                   </Card>
                 </div>
+                
               ))}
             </div>
           </ScrollArea>
