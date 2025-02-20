@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect, } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useSelector, useDispatch } from 'react-redux'
+import toast from 'react-hot-toast'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -11,60 +13,92 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Package, DollarSign, ShoppingCart, ImageIcon, X } from 'lucide-react'
+import { get_category } from '@/store/Reducers/categoryReducer'
+import { add_product, messageClear } from '@/store/Reducers/productReducer'
+
+
+
+interface ProductState {
+  name: string;
+  description: string;
+  discount: string;
+  price: string;
+  brand: string;
+  stock: string;
+  city: string;
+  state: string;
+  country: string;
+}
 
 export default function ProductForm({ onCancel }: { onCancel: () => void }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("basic")
-  const [state, setState] = useState({
+  const dispatch = useDispatch<any>();
+  const { categorys } = useSelector((state: any) => state.category);
+  const { successMessage, errorMessage, loader } = useSelector((state: any) => state.product);
+  const { userInfo } = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    dispatch(get_category({ searchValue: '', parPage: '', page: '' } as any));
+  }, [dispatch]);
+
+  const [state, setState] = useState<ProductState>({
     name: '',
     description: '',
-    price: '',
-    stock: '',
-    category: '',
     discount: '',
+    price: '',
     brand: '',
+    stock: '',
     city: '',
     state: '',
     country: '',
-  })
-  const [images, setImages] = useState<File[]>([])
-  const [imagePreviews, setImagePreviews] = useState<string[]>([])
-  const [shopName, setShopName] = useState('')
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setState({ ...state, [e.target.name]: e.target.value })
-  }
+    setState({ ...state, [e.target.name]: e.target.value });
+  };
 
-  const handleImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const [category, setCategory] = useState('');
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const fileArray = Array.from(e.target.files)
-      setImages(fileArray)
-      
-      const previewArray = fileArray.map(file => URL.createObjectURL(file))
-      setImagePreviews(previewArray)
+      const filesArray = Array.from(e.target.files);
+      setImages([...images, ...filesArray]);
+      setImagePreviews([...imagePreviews, ...filesArray.map(file => URL.createObjectURL(file))]);
     }
-  }, [])
+  };
 
-  const removeImage = useCallback((index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index))
-    setImagePreviews(prev => prev.filter((_, i) => i !== index))
-  }, [])
+  const removeImage = (index: number) => {
+    setImages(images.filter((_, i) => i !== index));
+    setImagePreviews(imagePreviews.filter((_, i) => i !== index));
+  };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData()
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData:any = new FormData();
+    Object.entries(state).forEach(([key, value]) => formData.append(key, value));
+    formData.append('category', category);
+    formData.append('shopName', userInfo?.shopInfo?.shopName || '');
+    images.forEach(image => formData.append('images', image));
+    dispatch(add_product(formData));
+  };
 
-    Object.entries(state).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-
-    formData.append('shopName', shopName)
-
-    images.forEach((image) => {
-      formData.append('images', image)
-    })
-
-  }
+  useEffect(() => {
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      setState({ name: '', description: '', discount: '', price: '', brand: '', stock: '', city: '', state: '', country: '' });
+      setCategory('');
+      setImages([]);
+      setImagePreviews([]);
+    }
+  }, [successMessage, errorMessage, dispatch]);
 
   const progress = (Object.values(state).filter(Boolean).length / Object.keys(state).length) * 100
 
@@ -102,7 +136,20 @@ export default function ProductForm({ onCancel }: { onCancel: () => void }) {
                     </div>
                     <div>
                       <Label htmlFor="category">Category</Label>
-                      <Input id="category" name="category" value={state.category} onChange={handleChange} required />
+                      <select 
+  id="category" 
+  name="category" 
+  value={category} 
+  onChange={(e) => setCategory(e.target.value)} 
+  required
+  className="w-full p-2 border rounded-md"
+>
+  <option value="">Select a category</option>
+  {categorys && categorys.map((cat: any) => (
+    <option key={cat._id} value={cat._id}>{cat.name}</option>
+  ))}
+</select>
+
                     </div>
                   </div>
                 </div>
@@ -128,7 +175,8 @@ export default function ProductForm({ onCancel }: { onCancel: () => void }) {
                     </div>
                     <div>
                       <Label htmlFor="shopName">Shop Name</Label>
-                      <Input id="shopName" name="shopName" value={shopName} onChange={(e) => setShopName(e.target.value)} required />
+                      <Input id="shopName" name="shopName" value={userInfo?.shopInfo?.shopName || ''} disabled />
+
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
