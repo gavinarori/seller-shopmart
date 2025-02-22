@@ -119,7 +119,7 @@ const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        clearMessage: (state) => {
+        messageClear: (state) => {
             state.errorMessage = '';
             state.successMessage = '';
         },
@@ -175,5 +175,5 @@ const productSlice = createSlice({
     },
 });
 
-export const { clearMessage } = productSlice.actions;
+export const {  messageClear } = productSlice.actions;
 export default productSlice.reducer;
