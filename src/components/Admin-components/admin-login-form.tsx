@@ -8,14 +8,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { messageClear, seller_login } from "@/store/Reducers/authReducer";
+import { messageClear, admin_login } from "@/store/Reducers/authReducer";
 
 interface SignInState {
   email: string;
   password: string;
 }
 
-export function LoginForm({
+export function AdminLoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
@@ -39,7 +39,7 @@ export function LoginForm({
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(seller_login(state));
+    dispatch(admin_login(state));
   };
 
   useEffect(() => {
