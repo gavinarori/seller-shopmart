@@ -173,11 +173,6 @@ export default function ProductForm({ onCancel }: { onCancel: () => void }) {
                       <Label htmlFor="stock">Stock</Label>
                       <Input id="stock" name="stock" type="number" value={state.stock} onChange={handleChange} required />
                     </div>
-                    <div>
-                      <Label htmlFor="shopName">Shop Name</Label>
-                      <Input id="shopName" name="shopName" value={userInfo?.shopInfo?.shopName || ''} disabled />
-
-                    </div>
                   </div>
                   <div className="grid grid-cols-3 gap-4">
                     <div>
