@@ -1,5 +1,3 @@
-
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import api from '@/app/api/api';
@@ -97,10 +95,32 @@ export const get_user_info = createAsyncThunk<ApiResponse>(
     }
 );
 
+export const profile_image_upload = createAsyncThunk<ApiResponse>(
+    'auth/profile_image_upload',
+    async (image, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.post<ApiResponse>('/profile-image-upload', image, { withCredentials: true })
+            return fulfillWithValue(data)
+        } catch (error:any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const profile_info_add = createAsyncThunk<ApiResponse>(
+    'auth/profile_info_add',
+    async (info, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.post<ApiResponse>('/profile-info-add', info, { withCredentials: true })
+            return fulfillWithValue(data)
+        } catch (error:any) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 const returnRole = (token: string | null): string => {
-
     if (typeof window === "undefined") return ""; 
-
     if (token) {
         const decodedToken: any = jwtDecode(token);
         const expireTime = new Date(decodedToken.exp * 1000);
@@ -117,11 +137,10 @@ const initialState: AuthState = {
     successMessage: '',
     errorMessage: '',
     loader: false,
-    userInfo: null,
+    userInfo: '',
     role: typeof window !== "undefined" ? returnRole(localStorage.getItem("accessToken")) : "",
     token: typeof window !== "undefined" ? localStorage.getItem("accessToken") : null,
 };
-
 
 export const authReducer = createSlice({
     name: 'auth',
@@ -160,6 +179,18 @@ export const authReducer = createSlice({
                 state.loader = false;
                 state.userInfo = payload.userInfo;
                 state.role = payload.userInfo?.role;
+            })
+            .addCase(profile_image_upload.pending, (state) => { state.loader = true; })
+            .addCase(profile_image_upload.fulfilled, (state, { payload }) => {
+                state.loader = false;
+                state.userInfo = payload.userInfo;
+                state.successMessage = payload.message;
+            })
+            .addCase(profile_info_add.pending, (state) => { state.loader = true; })
+            .addCase(profile_info_add.fulfilled, (state, { payload }) => {
+                state.loader = false;
+                state.userInfo = payload.userInfo;
+                state.successMessage = payload.message;
             });
     }
 });

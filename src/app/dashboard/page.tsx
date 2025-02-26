@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Chart } from "@/components/charts"
 import ProductForm from "@/components/product-form"
 import { Banner } from "@/components/banner"
+import Profile from "@/components/profile"
 
 export default function Page() {
   const [activeView, setActiveView] = useState<string>("home")
@@ -17,6 +18,8 @@ export default function Page() {
         return <Chart />
       case "add-product":
         return <ProductForm onCancel={() => setActiveView("home")} />
+        case "profile":
+          return < Profile  />
       default:
         return <Chart />
     }
