@@ -8,6 +8,7 @@ import { Chart } from "@/components/charts"
 import ProductForm from "@/components/product-form"
 import { Banner } from "@/components/banner"
 import Profile from "@/components/profile"
+import { ProductList } from "@/components/Allproducts"
 
 export default function Page() {
   const [activeView, setActiveView] = useState<string>("home")
@@ -20,6 +21,8 @@ export default function Page() {
         return <ProductForm onCancel={() => setActiveView("home")} />
         case "profile":
           return < Profile  />
+        case "Products":
+          return <ProductList />
       default:
         return <Chart />
     }

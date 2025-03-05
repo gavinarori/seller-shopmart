@@ -154,6 +154,12 @@ export function AppSidebar({ onNavigate, ...props }: { onNavigate: (view: string
               Profile
             </SidebarMenuButton>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={() => onNavigate("Products")}>
+              <Package className="w-4 h-4 mr-2" />
+              Products
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         <NavMain items={data.navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
