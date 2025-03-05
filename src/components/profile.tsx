@@ -68,7 +68,6 @@ const inputHandle = (e:any) => {
         [e.target.name]: e.target.value
     })
 }
-
   const handleTabClick = (tabName:any) => {
     setActiveTab(tabName);
   };
