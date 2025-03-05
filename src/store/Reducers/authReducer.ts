@@ -31,6 +31,13 @@ interface ApiResponse {
     userInfo?: any;
 }
 
+interface ProfileInfo {
+    division: string;
+    district: string;
+    shopName: string;
+    sub_district: string;
+}
+
 export const admin_login = createAsyncThunk<ApiResponse, LoginInfo>(
     'auth/admin_login',
     async (info, { rejectWithValue }) => {
@@ -95,29 +102,30 @@ export const get_user_info = createAsyncThunk<ApiResponse>(
     }
 );
 
-export const profile_image_upload = createAsyncThunk<ApiResponse>(
+export const profile_image_upload = createAsyncThunk<ApiResponse, FormData>(
     'auth/profile_image_upload',
-    async (image, { rejectWithValue, fulfillWithValue }) => {
+    async (image: FormData, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.post<ApiResponse>('/profile-image-upload', image, { withCredentials: true })
-            return fulfillWithValue(data)
-        } catch (error:any) {
-            return rejectWithValue(error.response.data)
+            const { data } = await api.post<ApiResponse>('/profile-image-upload', image, { withCredentials: true });
+            return fulfillWithValue(data);
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
         }
     }
-)
+);
 
-export const profile_info_add = createAsyncThunk<ApiResponse>(
+
+export const profile_info_add = createAsyncThunk<ApiResponse, ProfileInfo>(
     'auth/profile_info_add',
-    async (info, { rejectWithValue, fulfillWithValue }) => {
+    async (info: ProfileInfo, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.post<ApiResponse>('/profile-info-add', info, { withCredentials: true })
-            return fulfillWithValue(data)
-        } catch (error:any) {
-            return rejectWithValue(error.response.data)
+            const { data } = await api.post<ApiResponse>('/profile-info-add', info, { withCredentials: true });
+            return fulfillWithValue(data);
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
         }
     }
-)
+);
 
 const returnRole = (token: string | null): string => {
     if (typeof window === "undefined") return ""; 
