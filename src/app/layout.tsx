@@ -4,8 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./theme-provider"
 import { Toaster } from 'react-hot-toast'
-import store from '@/store/index'
 import { Providers } from "./providers";
+
 
 
 const geistSans = Geist({
