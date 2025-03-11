@@ -54,7 +54,7 @@ export const get_customer_message = createAsyncThunk(
     }
 );
 
-export const send_message = createAsyncThunk(
+export const send_message:any = createAsyncThunk(
     'chat/send_message',
     async (info: Message, { rejectWithValue, fulfillWithValue }) => {
         try {
@@ -78,7 +78,7 @@ export const get_sellers = createAsyncThunk(
     }
 );
 
-export const send_message_seller_admin = createAsyncThunk(
+export const send_message_seller_admin:any = createAsyncThunk(
     'chat/send_message_seller_admin',
     async (info: Message, { rejectWithValue, fulfillWithValue }) => {
         try {
@@ -102,7 +102,7 @@ export const get_admin_message = createAsyncThunk(
     }
 );
 
-export const get_seller_message = createAsyncThunk(
+export const get_seller_message:any = createAsyncThunk(
     'chat/get_seller_message',
     async (receverId: string, { rejectWithValue, fulfillWithValue }) => {
         try {

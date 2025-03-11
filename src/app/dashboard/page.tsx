@@ -6,7 +6,6 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { Chart } from "@/components/charts"
 import ProductForm from "@/components/product-form"
-import { Banner } from "@/components/banner"
 import Profile from "@/components/profile"
 import { ProductList } from "@/components/Allproducts"
 
