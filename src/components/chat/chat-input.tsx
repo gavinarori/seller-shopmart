@@ -2,6 +2,10 @@
 
 import type React from "react"
 
+import { PaperclipIcon, SmileIcon, SendIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
 interface ChatInputProps {
   text: string
   setText: (text: string) => void
@@ -18,21 +22,41 @@ export default function ChatInput({
   readOnly = false,
 }: ChatInputProps) {
   return (
-    <form onSubmit={send} className="flex gap-3">
-      <input
+    <form onSubmit={send} className="flex items-center gap-2">
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className=""
+        disabled={readOnly}
+      >
+        <PaperclipIcon className="h-5 w-5" />
+        <span className="sr-only">Attach file</span>
+      </Button>
+
+      <Input
         readOnly={readOnly}
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="w-full flex justify-between px-2 border border-slate-700 items-center py-[5px] focus:border-blue-500 rounded-md outline-none bg-transparent text-[#d0d2d6]"
-        type="text"
+        className="flex-1 "
         placeholder={placeholder}
       />
-      <button
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className=" "
         disabled={readOnly}
-        className="shadow-lg bg-cyan-500 hover:shadow-cyan-500/50 text-semibold w-[75px] h-[35px] rounded-md text-white flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
+        <SmileIcon className="h-5 w-5" />
+        <span className="sr-only">Add emoji</span>
+      </Button>
+
+      <Button type="submit" disabled={readOnly || !text.trim()} className=" ">
+        <SendIcon className="h-4 w-4 mr-2" />
         Send
-      </button>
+      </Button>
     </form>
   )
 }
