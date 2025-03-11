@@ -72,10 +72,10 @@ export default function ChatSidebar({ userId }: { userId: string }) {
                 <SidebarMenuItem>
                   <Link href="/chat/admin" passHref>
                     <SidebarMenuButton isActive={pathname === "/chat/admin"} className="w-full">
-                      <div className="flex items-center gap-3 w-full">
+                      <div className="flex items-center gap-3 w-full py-6">
                         <Avatar className="h-10 w-10">
                           <AvatarImage src="/images/admin.jpg" alt="Admin" />
-                          <AvatarFallback className="bg-rose-600">AD</AvatarFallback>
+                          <AvatarFallback className="bg-rose-600 text-white ">AD</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col flex-1 overflow-hidden">
                           <p className="text-sm font-medium">Support Team</p>
