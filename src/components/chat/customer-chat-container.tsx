@@ -3,12 +3,14 @@
 import type React from "react"
 
 import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
 import { useAppDispatch, useAppSelector } from "@/hooks/hook"
-import { get_customers, messageClear, get_customer_message, send_message, updateMessage } from '../../store/Reducers/chatReducer'
+import { messageClear, get_customer_message, send_message, updateMessage } from "@/store/Reducers/chatReducer"
 import { socket } from "@/lib/utils"
 import MessageDisplay from "./message-display"
 import ChatInput from "@/components/chat/chat-input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Phone, Video, MoreVertical, MessageSquare } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface CustomerChatContainerProps {
   customerId: string
@@ -35,7 +37,7 @@ export default function CustomerChatContainer({ customerId, userId, shopName }: 
     if (!text.trim()) return
 
     dispatch(
-        send_message({
+      send_message({
         senderId: userId,
         receverId: customerId,
         text,
@@ -67,7 +69,6 @@ export default function CustomerChatContainer({ customerId, userId, shopName }: 
       if (customerId === receiverMessage.senderId && userId === receiverMessage.receverId) {
         dispatch(updateMessage(receiverMessage))
       } else {
-        
         console.log(`${receiverMessage.senderName} sent a message`)
         dispatch(messageClear())
       }
@@ -78,58 +79,69 @@ export default function CustomerChatContainer({ customerId, userId, shopName }: 
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
+  if (!customerId) {
+    return (
+      <div className="flex-1 flex items-center justify-center flex-col gap-4  rounded-md p-6 ">
+        <MessageSquare className="h-16 w-16 " />
+        <h3 className="text-xl font-medium">No conversation selected</h3>
+        <p className=" text-center max-w-md">Select a customer from the sidebar to start chatting</p>
+      </div>
+    )
+  }
+
   return (
-    <>
-      {customerId ? (
-        <>
-          <div className="flex justify-between items-center">
-            <div className="flex justify-start items-center gap-3">
-              <div className="relative">
-                <Image
-                  className="w-[42px] h-[42px] border-green-500 border-2 max-w-[42px] p-[2px] rounded-full"
-                  src="/images/customer.jpg"
-                  alt={currentCustomer?.name || "Customer"}
-                  width={42}
-                  height={42}
-                />
-                {activeCustomer.some((a:any) => a.customerId === currentCustomer?._id) && (
-                  <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-                )}
-              </div>
-              <h2 className="text-base text-white font-semibold">{currentCustomer?.name}</h2>
-            </div>
+    <div className="flex flex-col h-full">
+      {/* Chat header */}
+      <div className="flex items-center justify-between p-4 border-b ">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Avatar className="h-10 w-10 border-2 border-green-500">
+              <AvatarImage src="/images/customer.jpg" alt={currentCustomer?.name || "Customer"} />
+              <AvatarFallback>{currentCustomer?.name?.charAt(0) || "C"}</AvatarFallback>
+            </Avatar>
+            {activeCustomer.some((a: any) => a.customerId === currentCustomer?._id) && (
+              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-background"></span>
+            )}
           </div>
-
-          <div className="py-4">
-            <div className="bg-slate-800 h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto">
-              <MessageDisplay
-                messages={messages}
-                currentUserId={userId}
-                scrollRef={scrollRef}
-                userImage="/images/seller.png"
-                otherImage="/images/customer.jpg"
-                isCustomerChat={true}
-              />
-            </div>
+          <div>
+            <h2 className="text-base font-semibold ">{currentCustomer?.name}</h2>
+            <p className="text-xs ">
+              {activeCustomer.some((a: any) => a.customerId === currentCustomer?._id) ? "Online" : "Offline"}
+            </p>
           </div>
-
-          <ChatInput
-            text={text}
-            setText={setText}
-            send={send}
-            placeholder="Message customer..."
-            readOnly={!customerId}
-          />
-        </>
-      ) : (
-        <div className="w-full h-full flex justify-center items-center flex-col gap-2 text-white">
-          <span>
-            
-          </span>
-          <span>Select a customer to start chatting</span>
         </div>
-      )}
-    </>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="">
+            <Phone className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="">
+            <Video className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="">
+            <MoreVertical className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+
+      {/* Chat messages */}
+      <div className="flex-1 p-4 overflow-hidden">
+        <div className=" h-[calc(100vh-290px)] rounded-md p-4 overflow-y-auto">
+          <MessageDisplay
+            messages={messages}
+            currentUserId={userId}
+            scrollRef={scrollRef}
+            userImage="/images/seller.png"
+            otherImage="/images/customer.jpg"
+            isCustomerChat={true}
+          />
+        </div>
+      </div>
+
+      {/* Chat input */}
+      <div className="p-4 border-t ">
+        <ChatInput text={text} setText={setText} send={send} placeholder="Message customer..." readOnly={!customerId} />
+      </div>
+    </div>
   )
 }
 

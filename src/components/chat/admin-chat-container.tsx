@@ -3,12 +3,20 @@
 import type React from "react"
 
 import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
 import { useAppDispatch, useAppSelector } from "@/hooks/hook"
-import { send_message_seller_admin, updateAdminMessage, get_seller_message, messageClear } from "@/store/Reducers/chatReducer"
+import {
+  send_message_seller_admin,
+  updateAdminMessage,
+  get_seller_message,
+  messageClear,
+} from "@/store/Reducers/chatReducer"
 import { socket } from "@/lib/utils"
 import MessageDisplay from "./message-display"
 import ChatInput from "./chat-input"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Phone, Video, MoreVertical } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
 
 interface AdminChatContainerProps {
   userId: string
@@ -32,7 +40,7 @@ export default function AdminChatContainer({ userId, userName, userImage }: Admi
     if (!text.trim()) return
 
     dispatch(
-        send_message_seller_admin({
+      send_message_seller_admin({
         senderId: userId,
         receverId: "",
         message: text,
@@ -64,27 +72,41 @@ export default function AdminChatContainer({ userId, userName, userImage }: Admi
   }, [seller_admin_message])
 
   return (
-    <>
-      <div className="flex justify-between items-center">
-        <div className="flex justify-start items-center gap-3">
+    <div className="flex flex-col h-full">
+      {/* Chat header */}
+      <div className="flex items-center justify-between p-4 border-b ">
+        <div className="flex items-center gap-3">
           <div className="relative">
-            <Image
-              className="w-[42px] h-[42px] border-green-500 border-2 max-w-[42px] p-[2px] rounded-full"
-              src="/images/admin.jpg"
-              alt="Admin"
-              width={42}
-              height={42}
-            />
+            
+            <Avatar className="h-10 w-10 border-2 border-green-500">
+              <AvatarImage src="/images/admin.jpg" alt="Admin" />
+              <AvatarFallback>AD</AvatarFallback>
+            </Avatar>
             {activeAdmin && (
-              <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
+              <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-background"></span>
             )}
           </div>
-          <h2 className="text-base text-white font-semibold">Support</h2>
+          <div>
+            <h2 className="text-base font-semibold text-white">Support</h2>
+            <p className="text-xs">{activeAdmin ? "Online" : "Offline"}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="">
+            <Phone className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="">
+            <Video className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" className="">
+            <MoreVertical className="h-5 w-5" />
+          </Button>
         </div>
       </div>
 
-      <div className="py-4">
-        <div className="bg-slate-800 h-[calc(100vh-290px)] rounded-md p-3 overflow-y-auto">
+      {/* Chat messages */}
+      <div className="flex-1 p-4 overflow-hidden">
+        <div className="bg-background h-[calc(100vh-290px)] rounded-md p-4 overflow-y-auto">
           <MessageDisplay
             messages={seller_admin_message}
             currentUserId={userId}
@@ -95,8 +117,11 @@ export default function AdminChatContainer({ userId, userName, userImage }: Admi
         </div>
       </div>
 
-      <ChatInput text={text} setText={setText} send={send} placeholder="Message admin support..." />
-    </>
+      {/* Chat input */}
+      <div className="p-4 border-t ">
+        <ChatInput text={text} setText={setText} send={send} placeholder="Message admin support..." />
+      </div>
+    </div>
   )
 }
 

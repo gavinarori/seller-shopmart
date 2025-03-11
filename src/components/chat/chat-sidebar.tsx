@@ -2,16 +2,34 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useAppDispatch, useAppSelector } from "@/hooks/hook"
-import { get_customers, } from '../../store/Reducers/chatReducer'
-
+import { get_customers } from "@/store/Reducers/chatReducer"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarTrigger,
+  SidebarProvider,
+  useSidebar,
+} from "@/components/ui/sidebar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Search, MessageSquare, Users, Settings, LogOut, Menu } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export default function ChatSidebar({ userId }: { userId: string }) {
-  const [show, setShow] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const pathname = usePathname()
   const dispatch = useAppDispatch()
+  const { toggleSidebar } = useSidebar()
 
   const { customers, activeCustomer } = useAppSelector((state) => state.chat)
 
@@ -19,80 +37,133 @@ export default function ChatSidebar({ userId }: { userId: string }) {
     dispatch(get_customers(userId))
   }, [dispatch, userId])
 
+  // Filter customers based on search query
+  const filteredCustomers = customers.filter((customer: any) =>
+    customer.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
+
   return (
-    <div
-      className={`w-[280px] h-full absolute z-10 ${show ? "-left-[16px]" : "-left-[336px]"} md:left-0 md:relative transition-all`}
-    >
-      <div className="w-full h-[calc(100vh-177px)] bg-[#252b3b] md:bg-transparent overflow-y-auto">
-        <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 text-white">
-          <h2>Chats</h2>
-          <span onClick={() => setShow(!show)} className="block cursor-pointer ">
-            close
-          </span>
-        </div>
-
-        {/* Admin Chat Link */}
-        <Link
-          href="/chat/admin"
-          className={`h-[60px] flex justify-start gap-2 items-center text-white px-2 py-2 rounded-sm cursor-pointer ${pathname === "/dashboard/chat/admin" ? "bg-blue-600" : "bg-slate-700"} mb-2`}
-        >
-          <div className="relative">
-            <Image
-              className="w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full"
-              src="/images/admin.jpg"
-              alt="Admin"
-              width={38}
-              height={38}
-            />
+    <>
+    
+      <Sidebar >
+        <SidebarHeader>
+          <div className="flex items-center justify-between p-4">
+            <h2 className="text-xl font-semibold ">Chats</h2>
           </div>
-          <div className="flex justify-center items-start flex-col w-full">
-            <div className="flex justify-between items-center w-full">
-              <h2 className="text-base font-semibold">Support</h2>
-            </div>
-          </div>
-        </Link>
-
-        <div className="flex text-xl justify-between items-center p-4 md:p-0 md:px-3 md:pb-3 text-white">
-          <h2>Customers</h2>
-        </div>
-
-        {/* Customer List */}
-        {customers.map((customer:any, i) => (
-          <Link
-            key={i}
-            href={`/chat/customer/${customer.fdId}`}
-            className={`h-[60px] flex justify-start gap-2 items-center text-white px-2 py-2 rounded-sm cursor-pointer ${pathname === `/dashboard/chat/customer/${customer.fdId}` ? "bg-blue-600" : "bg-slate-700"} mb-1`}
-          >
+          <div className="px-4 pb-2">
             <div className="relative">
-              <Image
-                className="w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full"
-                src="/images/customer.jpg"
-                alt={customer.name}
-                width={38}
-                height={38}
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 " />
+              <Input
+                type="search"
+                placeholder="Search conversations..."
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-              {activeCustomer.some((a:any) => a.customerId === customer.fdId) && (
-                <div className="w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0"></div>
-              )}
             </div>
-            <div className="flex justify-center items-start flex-col w-full">
-              <div className="flex justify-between items-center w-full">
-                <h2 className="text-base font-semibold">{customer.name}</h2>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+          </div>
+        </SidebarHeader>
 
-      <div
-        onClick={() => setShow(!show)}
-        className="w-[35px] flex md:hidden h-[35px] rounded-sm bg-blue-500 shadow-lg hover:shadow-blue-500/50 justify-center cursor-pointer items-center text-white absolute top-4 right-[-50px]"
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel >Support</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <Link href="/chat/admin" passHref>
+                    <SidebarMenuButton isActive={pathname === "/chat/admin"} className="w-full">
+                      <div className="flex items-center gap-3 w-full">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src="/images/admin.jpg" alt="Admin" />
+                          <AvatarFallback className="bg-rose-600">AD</AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col flex-1 overflow-hidden">
+                          <p className="text-sm font-medium">Support Team</p>
+                          <p className="text-xs  truncate">Contact admin support</p>
+                        </div>
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          <SidebarGroup>
+            <SidebarGroupLabel className="">Customers</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {filteredCustomers.length > 0 ? (
+                  filteredCustomers.map((customer: any, i) => (
+                    <SidebarMenuItem key={i}>
+                      <Link href={`/chat/customer/${customer.fdId}`} passHref>
+                        <SidebarMenuButton isActive={pathname === `/chat/customer/${customer.fdId}`} className="w-full">
+                          <div className="flex items-center gap-3 w-full">
+                            <div className="relative">
+                              <Avatar className="h-9 w-9 border-2">
+                                <AvatarImage src="/images/customer.jpg" alt={customer.name} />
+                                <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              {activeCustomer.some((a: any) => a.customerId === customer.fdId) && (
+                                <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-background"></span>
+                              )}
+                            </div>
+                            <div className="flex flex-col flex-1 overflow-hidden">
+                              <p className="text-sm font-medium">{customer.name}</p>
+                              <p className="text-xs  truncate">Click to chat</p>
+                            </div>
+                          </div>
+                        </SidebarMenuButton>
+                      </Link>
+                    </SidebarMenuItem>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-sm ">No customers found</div>
+                )}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <MessageSquare className="h-4 w-4 mr-2" />
+                <span>All Chats</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <Users className="h-4 w-4 mr-2" />
+                <span>Customers</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <Settings className="h-4 w-4 mr-2" />
+                <span>Settings</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <LogOut className="h-4 w-4 mr-2" />
+                <span>Logout</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+
+      {/* Mobile menu toggle button */}
+      <Button
+        onClick={toggleSidebar}
+        className="md:hidden fixed bottom-4 right-4 z-50 rounded-full w-12 h-12 shadow-lg bg-cyan-600 hover:bg-cyan-700"
+        size="icon"
       >
-        <span>
-          list
-        </span>
-      </div>
-    </div>
+        <Menu className="h-5 w-5" />
+      </Button>
+    </>
   )
 }
 

@@ -1,5 +1,5 @@
-import type React from "react"
-import Image from "next/image"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { format } from "date-fns"
 
 interface MessageDisplayProps {
   messages: any[]
@@ -18,62 +18,55 @@ export default function MessageDisplay({
   otherImage,
   isCustomerChat = false,
 }: MessageDisplayProps) {
+  if (!messages || messages.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="">No messages yet. Start the conversation!</p>
+      </div>
+    )
+  }
+
   return (
-    <>
+    <div className="space-y-4">
       {messages.map((message, i) => {
         const isCurrentUser = isCustomerChat ? message.senderId !== currentUserId : message.senderId === currentUserId
-
         const messageContent = isCustomerChat ? message.message : message.message
+        const timestamp = message.timestamp ? new Date(message.timestamp) : new Date()
 
-        if (!isCurrentUser) {
-          return (
-            <div
-              ref={i === messages.length - 1 ? scrollRef : null}
-              key={i}
-              className="w-full flex justify-start items-center"
-            >
-              <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                <div>
-                  <Image
-                    className="w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]"
-                    src={otherImage || "/placeholder.svg"}
-                    alt="User"
-                    width={38}
-                    height={38}
-                  />
-                </div>
-                <div className="flex justify-center items-start flex-col w-full bg-orange-500 shadow-lg shadow-orange-500/50 text-white py-1 px-2 rounded-sm">
-                  <span>{messageContent}</span>
-                </div>
+        return (
+          <div
+            ref={i === messages.length - 1 ? scrollRef : null}
+            key={i}
+            className={`flex ${isCurrentUser ? "justify-end" : "justify-start"} group`}
+          >
+            <div className={`flex items-end gap-2 max-w-[75%] ${isCurrentUser ? "flex-row-reverse" : "flex-row"}`}>
+              <Avatar className={`h-8 w-8 shrink-0 ${isCurrentUser ? "ml-2" : "mr-2"}`}>
+                <AvatarImage src={isCurrentUser ? userImage : otherImage} alt="User" />
+                <AvatarFallback>{isCurrentUser ? "ME" : "OT"}</AvatarFallback>
+              </Avatar>
+
+              <div
+                className={`
+                flex flex-col 
+                ${isCurrentUser ? "items-end bg-rose-600 text-white" : "items-start  text-white"}
+                px-3 py-2 rounded-lg shadow-md
+              `}
+              >
+                <p className="text-sm break-words">{messageContent}</p>
+                <span
+                  className={`
+                  text-xs mt-1 opacity-70
+                  ${isCurrentUser ? "text-blue-100" : "text-slate-400"}
+                `}
+                >
+                  {format(timestamp, "h:mm a")}
+                </span>
               </div>
             </div>
-          )
-        } else {
-          return (
-            <div
-              ref={i === messages.length - 1 ? scrollRef : null}
-              key={i}
-              className="w-full flex justify-end items-center"
-            >
-              <div className="flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]">
-                <div className="flex justify-center items-start flex-col w-full bg-blue-500 shadow-lg shadow-blue-500/50 text-white py-1 px-2 rounded-sm">
-                  <span>{messageContent}</span>
-                </div>
-                <div>
-                  <Image
-                    className="w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]"
-                    src={userImage || "/placeholder.svg"}
-                    alt="User"
-                    width={38}
-                    height={38}
-                  />
-                </div>
-              </div>
-            </div>
-          )
-        }
+          </div>
+        )
       })}
-    </>
+    </div>
   )
 }
 
