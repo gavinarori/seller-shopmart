@@ -14,7 +14,7 @@ export default function Page() {
       <SidebarInset>
         <main className="flex-1 overflow-auto ">
           <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8 h-full flex items-center justify-center">
-            <div className="max-w-2xl w-full rounded-lg  shadow-lg overflow-hidden">
+            <div className="max-w-2xl w-full  overflow-hidden">
               <div className="p-8 text-center">
                 <div className="mx-auto  w-16 h-16 rounded-full flex items-center justify-center mb-6">
                   <MessageSquare className="h-8 w-8 text-rose-600" />
@@ -33,10 +33,10 @@ export default function Page() {
                     <p className=" text-sm mb-4">
                       Respond to customer inquiries and provide assistance with their orders or questions.
                     </p>
-                    <div className="bg-rose-600 p-3 rounded-md text-sm  mb-3">
+                    <div className="bg-rose-600 p-3 text-white rounded-md text-sm  mb-3">
                       "Hello! How can I help with your recent order?"
                     </div>
-                    <div className="bg-rose-600 p-3 rounded-md text-sm ">
+                    <div className="bg-rose-600 p-3 text-white  rounded-md text-sm ">
                       "I've checked your order status and it will be delivered tomorrow."
                     </div>
                   </div>
@@ -49,10 +49,10 @@ export default function Page() {
                     <p className=" text-sm mb-4">
                       Get help from our admin team for technical issues or account-related questions.
                     </p>
-                    <div className="bg-rose-600 p-3 rounded-md text-sm  mb-3">
+                    <div className="bg-rose-600 p-3 text-white  rounded-md text-sm  mb-3">
                       "I need help with updating my store settings."
                     </div>
-                    <div className="bg-rose-600 p-3 rounded-md text-sm ">
+                    <div className="bg-rose-600 p-3 text-white  rounded-md text-sm ">
                       "Could you help me resolve an issue with a customer order?"
                     </div>
                   </div>

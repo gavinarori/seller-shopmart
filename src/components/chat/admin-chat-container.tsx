@@ -87,7 +87,7 @@ export default function AdminChatContainer({ userId, userName, userImage }: Admi
             )}
           </div>
           <div>
-            <h2 className="text-base font-semibold text-white">Support</h2>
+            <h2 className="text-base font-semibold ">Support</h2>
             <p className="text-xs">{activeAdmin ? "Online" : "Offline"}</p>
           </div>
         </div>
