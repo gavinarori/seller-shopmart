@@ -27,7 +27,7 @@ export type Product = {
 
 export function ProductList() {
   const dispatch = useDispatch<any>()
-  const { products, totalProduct } = useSelector((state:any) => state.product)
+  const { products, totalProduct } = useSelector((state: any) => state.product)
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -117,17 +117,17 @@ export function ProductList() {
                 </TableCell>
               </TableRow>
             ) : (
-              products.map((product:any , i:any) => (
+              products.map((product: any, i: any) => (
                 <TableRow key={product._id}>
                   <TableCell>{i + 1}</TableCell>
                   <TableCell>
                     {product.images && product.images.length > 0 ? (
                       <div className="w-[45px] h-[45px] relative">
                         <Image
-                        src={product.images.length > 0 ? product.images[0].url : "/placeholder.svg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover rounded-md"
+                          src={product.images.length > 0 ? product.images[0].url : "/placeholder.svg"}
+                          alt={product.name}
+                          fill
+                          className="object-cover rounded-md"
                         />
                       </div>
                     ) : (
@@ -233,4 +233,3 @@ export function ProductList() {
     </div>
   )
 }
-
