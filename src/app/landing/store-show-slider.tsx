@@ -11,14 +11,14 @@ const shows = [
     id: 1,
     title: "Fashion Collection",
     image: "/front-view-smiley-woman-presenting-clothes.jpg",
-    logo: "/placeholder.svg?height=100&width=200",
+    logo: "/vercel.svg",
     provider: "Premium Store",
   },
   {
     id: 2,
     title: "Vintage Boutique",
     image: "/people-antique-store-side-view.jpg",
-    logo: "/placeholder.svg?height=100&width=200",
+    logo: "/vercel.svg",
     provider: "Artisan Market",
   },
   {
@@ -26,14 +26,14 @@ const shows = [
     title: "Tech Gadgets",
     image:
       "/beautiful-three-welldressed-afro-american-girls-customers-with-colored-shopping-bags-mobile-phone-shop-choosing-smartphone.jpg",
-    logo: "/placeholder.svg?height=100&width=200",
+    logo: "/vercel.svg",
     provider: "Digital Hub",
   },
   {
     id: 4,
     title: "Footwear Collection",
     image: "/africanamerican-woman-shopping-shoes-store.jpg",
-    logo: "/placeholder.svg?height=100&width=200",
+    logo: "/vercel.svg",
     provider: "Style Emporium",
   },
 ]
