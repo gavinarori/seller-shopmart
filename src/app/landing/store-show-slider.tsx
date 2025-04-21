@@ -84,14 +84,6 @@ export default function StoreShowSlider() {
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
           Discover our most popular store designs that are helping businesses thrive online.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-md font-medium">
-            Create Your Online Store
-          </Button>
-          <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-3 rounded-md font-medium">
-            View All Templates
-          </Button>
-        </div>
       </div>
 
       {/* Slider Section - now with relative positioning and reduced height */}

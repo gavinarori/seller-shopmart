@@ -3,7 +3,6 @@ import Navbar from "./Navbar"
 import Banner from "./banner"
 import { Footer } from "./Footer"
 import { SetupGuide } from "./setup-guide"
-import { FeatureHighlights } from "./feature-highlights"
 import  CallToAction  from "./call-to-action"
 import { Testimonials } from "./testimonials"
 import StoreShowSlider from "./store-show-slider"
@@ -15,7 +14,6 @@ export default function Landing() {
         <Banner/>
         <StoreShowSlider/>
         <TrendingSection/>
-        <FeatureHighlights/>
         <SetupGuide/>
         <Testimonials/>
         <CallToAction/>
