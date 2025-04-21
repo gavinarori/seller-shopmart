@@ -11,7 +11,7 @@ export function TrendingSection() {
     {
       name: "Minimal Home",
       category: "Home Decor",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/interior-shot-modern-house-dining-room-with-art-wall_181624-1556.jpg",
       rating: 4.9,
       reviews: 243,
       growth: "+127%",
@@ -19,7 +19,7 @@ export function TrendingSection() {
     {
       name: "EcoWear",
       category: "Sustainable Fashion",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/eco-bag-green-grass-outdoors_392895-543351.jpg",
       rating: 4.8,
       reviews: 189,
       growth: "+95%",
@@ -27,7 +27,7 @@ export function TrendingSection() {
     {
       name: "Tech Haven",
       category: "Electronics",
-      image: "/placeholder.svg?height=300&width=400",
+      image: "/focused-woman-testing-vr-headset.jpg",
       rating: 4.7,
       reviews: 312,
       growth: "+82%",
@@ -38,21 +38,21 @@ export function TrendingSection() {
     {
       name: "Eco-friendly Water Bottle",
       price: "$29.99",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/woman-dressed-comfortable-hoodie-drinks-water-hydrates-after-walking-across-sea-harbor-looks-thoughtfully-away-daydreams-about-something.jpg",
       category: "Lifestyle",
       sales: "5.2k sold this month",
     },
     {
       name: "Wireless Earbuds Pro",
       price: "$89.99",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/woman-with-earphones-medium-shot.jpg",
       category: "Electronics",
       sales: "4.8k sold this month",
     },
     {
       name: "Organic Cotton T-shirt",
       price: "$24.99",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/shirt-mockup-concept-with-plain-clothing.jpg",
       category: "Fashion",
       sales: "3.9k sold this month",
     },
@@ -114,16 +114,16 @@ export function TrendingSection() {
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {trendingProducts.map((product, index) => (
                   <Card key={index}>
-                    <div className="p-6 flex justify-center">
-                      <div className="relative h-48 w-48">
+                   
+                      <div className="relative h-48 ">
                         <Image
                           src={product.image || "/placeholder.svg"}
                           alt={product.name}
                           fill
-                          className="object-contain"
+                          className="object-cover"
                         />
                       </div>
-                    </div>
+                  
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <Badge variant="outline">{product.category}</Badge>
