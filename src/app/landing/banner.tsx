@@ -33,7 +33,7 @@ export default function Banner() {
           {/* Video Background */}
           <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" autoPlay muted loop playsInline>
             <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4"
+              src="/Black Modern Fashion Shop Video Promotion Facebook Post.mp4"
               type="video/mp4"
             />
             Your browser does not support the video tag.
