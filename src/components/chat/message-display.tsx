@@ -48,7 +48,7 @@ export default function MessageDisplay({
               <div
                 className={`
                 flex flex-col 
-                ${isCurrentUser ? "items-end bg-rose-600 text-white" : "items-start  text-white"}
+                ${isCurrentUser ? "items-end bg-rose-600 text-white" : "items-start  bg-sky-500 text-white"}
                 px-3 py-2 rounded-lg shadow-md
               `}
               >
@@ -56,7 +56,7 @@ export default function MessageDisplay({
                 <span
                   className={`
                   text-xs mt-1 opacity-70
-                  ${isCurrentUser ? "text-blue-100" : "text-slate-400"}
+                  ${isCurrentUser ? "text-blue-100" : "text-white"}
                 `}
                 >
                   {format(timestamp, "h:mm a")}

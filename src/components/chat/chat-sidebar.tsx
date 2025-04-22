@@ -27,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Search, MessageSquare, Users, Settings, LogOut, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function ChatSidebar({ userId }: { userId: string }) {
   const [searchQuery, setSearchQuery] = useState("")
@@ -53,7 +54,10 @@ export default function ChatSidebar({ userId }: { userId: string }) {
       <Sidebar >
         <SidebarHeader>
           <div className="flex items-center justify-between p-4">
-            <h2 className="text-xl font-semibold ">Chats</h2>
+            <Link href="/">
+            <h2 className="text-xl font-bold  ">ShopMart</h2>
+            </Link>
+           
           </div>
           <div className="px-4 pb-2">
             <div className="relative">
@@ -134,8 +138,7 @@ export default function ChatSidebar({ userId }: { userId: string }) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton>
-                <Settings className="h-4 w-4 mr-2" />
-                <span>Settings</span>
+              <ThemeToggle />
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
