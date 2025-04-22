@@ -22,9 +22,9 @@ export default function SignUpPage() {
       </div>
       <div className="relative hidden m-3 bg-muted rounded-xl lg:block">
         <img
-          src="/rb_4703.png"
+          src="/medium-shot-women-clothes-shopping.jpg"
           alt="Image"
-          className="absolute inset-0 rounded-xl h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 rounded-xl h-full w-full object-cover "
         />
       </div>
     </div>

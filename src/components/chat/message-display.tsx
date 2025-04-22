@@ -42,7 +42,7 @@ export default function MessageDisplay({
             <div className={`flex items-end gap-2 max-w-[75%] ${isCurrentUser ? "flex-row-reverse" : "flex-row"}`}>
               <Avatar className={`h-8 w-8 shrink-0 ${isCurrentUser ? "ml-2" : "mr-2"}`}>
                 <AvatarImage src={isCurrentUser ? userImage : otherImage} alt="User" />
-                <AvatarFallback>{isCurrentUser ? "ME" : "OT"}</AvatarFallback>
+                <AvatarFallback>{isCurrentUser ? "OT" : "ME"}</AvatarFallback>
               </Avatar>
 
               <div
