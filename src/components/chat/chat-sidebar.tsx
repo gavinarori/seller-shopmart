@@ -1,10 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from 'next/navigation';
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAppDispatch, useAppSelector } from "@/hooks/hook"
+import { useDispatch, useSelector } from 'react-redux';
 import { get_customers } from "@/store/Reducers/chatReducer"
+import { logout } from '@/store/Reducers/authReducer'
 import {
   Sidebar,
   SidebarContent,
@@ -29,6 +32,8 @@ export default function ChatSidebar({ userId }: { userId: string }) {
   const [searchQuery, setSearchQuery] = useState("")
   const pathname = usePathname()
   const dispatch = useAppDispatch()
+  const router = useRouter();
+  const role = useSelector((state: any) => state.auth.role);
   const { toggleSidebar } = useSidebar()
 
   const { customers, activeCustomer } = useAppSelector((state) => state.chat)
@@ -71,7 +76,7 @@ export default function ChatSidebar({ userId }: { userId: string }) {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <Link href="/chat/admin" passHref>
-                    <SidebarMenuButton isActive={pathname === "/chat/admin"} className="w-full">
+                    <SidebarMenuButton isActive={pathname === "/chat/admin"} className="w-full py-6">
                       <div className="flex items-center gap-3 w-full py-6">
                         <Avatar className="h-10 w-10">
                           <AvatarImage src="/images/admin.jpg" alt="Admin" />
@@ -96,9 +101,9 @@ export default function ChatSidebar({ userId }: { userId: string }) {
                 {filteredCustomers.length > 0 ? (
                   filteredCustomers.map((customer: any, i) => (
                     <SidebarMenuItem key={i}>
-                      <Link href={`/chat/customer/${customer.fdId}`} passHref>
-                        <SidebarMenuButton isActive={pathname === `/chat/customer/${customer.fdId}`} className="w-full">
-                          <div className="flex items-center gap-3 w-full">
+                      <Link href={`/chat/${customer.fdId}`} passHref>
+                        <SidebarMenuButton isActive={pathname === `/chat/customer/${customer.fdId}`} className="w-full py-6">
+                          <div className="flex items-center gap-3  w-full">
                             <div className="relative">
                               <Avatar className="h-9 w-9 border-2">
                                 <AvatarImage src="/images/customer.jpg" alt={customer.name} />
@@ -129,24 +134,12 @@ export default function ChatSidebar({ userId }: { userId: string }) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton>
-                <MessageSquare className="h-4 w-4 mr-2" />
-                <span>All Chats</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Users className="h-4 w-4 mr-2" />
-                <span>Customers</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
                 <Settings className="h-4 w-4 mr-2" />
                 <span>Settings</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton onClick={() => dispatch(logout({ navigate: router.push, role }))}>
                 <LogOut className="h-4 w-4 mr-2" />
                 <span>Logout</span>
               </SidebarMenuButton>

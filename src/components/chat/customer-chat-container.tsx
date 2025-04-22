@@ -96,8 +96,8 @@ export default function CustomerChatContainer({ customerId, userId, shopName }: 
         <div className="flex items-center gap-3">
           <div className="relative">
             <Avatar className="h-10 w-10 border-2 border-green-500">
-              <AvatarImage src="/images/customer.jpg" alt={currentCustomer?.name || "Customer"} />
-              <AvatarFallback>{currentCustomer?.name?.charAt(0) || "C"}</AvatarFallback>
+              <AvatarImage src="/images/customer.jpg" alt={currentCustomer?.name } />
+              <AvatarFallback>{currentCustomer?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
             {activeCustomer.some((a: any) => a.customerId === currentCustomer?._id) && (
               <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 ring-2 ring-background"></span>

@@ -70,7 +70,7 @@ export const logout = createAsyncThunk<void, LogoutInfo>(
         try {
             await api.get('/logout', { withCredentials: true });
             localStorage.removeItem('accessToken');
-            navigate(role === 'admin' ? '/admin/login' : '/login');
+            navigate(role === 'admin' ? '/admin/login' : '/login'); // using router.push
         } catch (error: any) {
             return rejectWithValue(error.response.data);
         }
