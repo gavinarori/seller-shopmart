@@ -15,14 +15,14 @@ export default function Page() {
   const handleNavigate = (view: string) => {
     setCurrentView(view)
   }
-  const [activeView, setActiveView] = useState<string>("home")
+
 
   const renderActiveView = () => {
-    switch (activeView) {
+    switch (currentView) {
       case "home":
         return <Chart />
       case "add-product":
-        return <ProductForm onCancel={() => setActiveView("home")} />
+        return <ProductForm onCancel={() => setCurrentView("home")} />
         case "profile":
           return < Profile  />
         case "Products":
@@ -44,7 +44,7 @@ export default function Page() {
         </header>
         <main className="flex-1 overflow-auto">
           <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
-            <div className="rounded-lg bg-background mt-8 shadow">{renderActiveView()}</div>
+            <div className="rounded-lg bg-background mt-8 ">{renderActiveView()}</div>
           </div>
         </main>
       </SidebarInset>
