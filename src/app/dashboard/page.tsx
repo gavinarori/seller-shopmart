@@ -10,6 +10,11 @@ import Profile from "@/components/profile"
 import { ProductList } from "@/components/Allproducts"
 
 export default function Page() {
+  const [currentView, setCurrentView] = useState("home")
+
+  const handleNavigate = (view: string) => {
+    setCurrentView(view)
+  }
   const [activeView, setActiveView] = useState<string>("home")
 
   const renderActiveView = () => {
@@ -29,7 +34,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <AppSidebar onNavigate={setActiveView} />
+      <AppSidebar onNavigate={handleNavigate} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-4">

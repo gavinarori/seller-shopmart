@@ -124,7 +124,7 @@ export function ProductList() {
                     {product.images && product.images.length > 0 ? (
                       <div className="w-[45px] h-[45px] relative">
                         <Image
-                          src={product.images.length > 0 ? product.images[0].url : "/placeholder.svg"}
+                          src={product.images.length > 0 ? product.images[0] : "/placeholder.svg"}
                           alt={product.name}
                           fill
                           className="object-cover rounded-md"
