@@ -10,7 +10,7 @@ import Profile from "@/components/profile"
 import { ProductList } from "@/components/Allproducts"
 
 export default function Page() {
-  const [currentView, setCurrentView] = useState("home")
+  const [currentView, setCurrentView] = useState("")
 
   const handleNavigate = (view: string) => {
     setCurrentView(view)
@@ -22,7 +22,7 @@ export default function Page() {
       case "home":
         return <Chart />
       case "add-product":
-        return <ProductForm onCancel={() => setCurrentView("home")} />
+        return <ProductForm onCancel={() => setCurrentView("")} />
         case "profile":
           return < Profile  />
         case "Products":
